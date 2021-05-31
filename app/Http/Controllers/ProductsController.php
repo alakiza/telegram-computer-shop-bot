@@ -57,9 +57,6 @@ class ProductsController extends BaseBotController
 
                     $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
 
-                    $user_params["selectedCategory"] = $category;
-
-                    Log::info($category);
                     DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_params" => json_encode($user_params)]);
 
                     return true;

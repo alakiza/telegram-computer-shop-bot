@@ -18,10 +18,6 @@ return [
     ],
     "controllers" => [
         'App\\Http\Controllers\\StartupController',
-        'App\\Http\Controllers\\GetPatientDataController',
-        'App\\Http\Controllers\\GetSensorsDataController',
-        'App\\Http\Controllers\\GetDoctorDataController',
-
         'App\\Http\Controllers\\ProductsController',
         'App\\Http\Controllers\\CategoriesController',
         'App\\Http\Controllers\\HelpController',
