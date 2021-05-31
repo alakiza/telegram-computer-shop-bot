@@ -69,8 +69,13 @@ class BotController extends Controller
             $dialog_path = [];
 
             if (empty($users)) {
-                $this->sendSorry($cid);
-                return;
+                // $this->sendSorry($cid);
+                DB::table('telegram_users')->insert(['user_id' => $cid,
+                                                     'dialog_path' => "telegram",
+                                                     'dialog_params' => json_encode([])]);
+
+                $users = DB::table('telegram_users')->where("user_id", "=", $cid)->get()->toArray();
+                // return;
             } else {
                 $user_dialog_path = $users[0]->dialog_path;
                 if (empty($user_dialog_path))
@@ -82,31 +87,97 @@ class BotController extends Controller
             }
 
             $config_path = $this->generateConfigPathByDialogPath($dialog_path);
+            $config_path = $users[0]->dialog_path;
+            Log::info($config_path);
             
             $context_commands = config($config_path.".commands");
             foreach($context_commands as $command_name => $command_config) {
+                Log::info($command_config['text']);
                 if (mb_stripos($mtext, $command_config['text']) !== false) {
                     $this->executeCommand($config_path.".commands.".$command_name, $message);
 
                     if (! $command_config['is_stub']) {
-                        array_push($dialog_path, $command_name);
+                        $config_path .= ".commands.".$command_name;
+                        // array_push($dialog_path, $command_name);
 
-                        DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => implode(".", $dialog_path)]);
+                        DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => $config_path]);
                     }
                     return;
                 }
             }
             if (mb_stripos($mtext, config("telegram.goBack")) !== false) {
+                $config_path_segments = explode(".", $config_path);
 
-                if (count($dialog_path) > 1) {
-                    unset($dialog_path[array_key_last($dialog_path)]);
+                if (count($config_path_segments) > 3) {
 
-                    $config_path = $this->generateConfigPathByDialogPath($dialog_path);   
+                    unset($config_path_segments[array_key_last($config_path_segments)]);
+                    unset($config_path_segments[array_key_last($config_path_segments)]);
+
+                    // $config_path = $this->generateConfigPathByDialogPath($dialog_path);
+                    $config_path = implode(".", $config_path_segments);
                     $this->executeCommand($config_path, $message);
 
-                    DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => implode(".", $dialog_path)]); 
+                    DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => $config_path]); 
                 };
+
+                return;
             }
+            $context_config = config($config_path);
+            if (isset($context_config["next_controller"]) == true) {
+                foreach($context_config["next_controller"] as $next_controller_name => $next_controller_config) {
+
+                    Log::info($next_controller_name);
+                    Log::info($next_controller_config["controller"]);
+
+                    $this->executeCommand($config_path.".next_controller.".$next_controller_name, $message);
+                }
+            }
+
+            // if (empty($users)) {
+            //     // $this->sendSorry($cid);
+            //     DB::table('telegram_users')->insert(['user_id' => $cid,
+            //                                          'dialog_path' => '',
+            //                                          'dialog_params' => json_encode([])]);
+
+            //     $users = DB::table('telegram_users')->where("user_id", "=", $cid)->get()->toArray();
+            //     // return;
+            // } else {
+            //     $user_dialog_path = $users[0]->dialog_path;
+            //     if (empty($user_dialog_path))
+            //     {
+            //         $dialog_path = [];
+            //     } else {
+            //         $dialog_path = explode(".", $user_dialog_path);
+            //     }
+            // }
+
+            // $config_path = $this->generateConfigPathByDialogPath($dialog_path);
+            
+            // $context_commands = config($config_path.".commands");
+            // foreach($context_commands as $command_name => $command_config) {
+            //     Log::info($command_config['text']);
+            //     if (mb_stripos($mtext, $command_config['text']) !== false) {
+            //         $this->executeCommand($config_path.".commands.".$command_name, $message);
+
+            //         if (! $command_config['is_stub']) {
+            //             array_push($dialog_path, $command_name);
+
+            //             DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => implode(".", $dialog_path)]);
+            //         }
+            //         return;
+            //     }
+            // }
+            // if (mb_stripos($mtext, config("telegram.goBack")) !== false) {
+
+            //     if (count($dialog_path) > 1) {
+            //         unset($dialog_path[array_key_last($dialog_path)]);
+
+            //         $config_path = $this->generateConfigPathByDialogPath($dialog_path);   
+            //         $this->executeCommand($config_path, $message);
+
+            //         DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => implode(".", $dialog_path)]); 
+            //     };
+            // }
         }
         
     }

@@ -37,6 +37,26 @@ class BaseBotController
         return $keyboard;
     }
 
+    public function generateKeyboardFromButtons($controller_config_path, $buttons, $message)
+    {
+        $self_config = config($controller_config_path);
+
+        // $commands = $self_config['commands'];
+        // $buttons = [];
+
+        // foreach ($commands as $cmd => $cmd_config) {
+        //     array_push($buttons, [$cmd_config['text']]);
+        // }
+
+        if (count(explode(".commands.", $controller_config_path)) > 2) {
+            array_push($buttons, [config("telegram.goBack")]);
+        }
+
+        $keyboard = new ReplyKeyboardMarkup($buttons, false, true);
+
+        return $keyboard;
+    }
+
     public function processCmd($controller_config_path, $message) 
     {
         

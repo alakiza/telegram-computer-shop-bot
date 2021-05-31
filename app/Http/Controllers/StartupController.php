@@ -20,17 +20,30 @@ class StartupController extends BaseBotController
 
         $cid = $message->getChat()->getId();
         $users = DB::table('telegram_users')->where("user_id", "=", $cid)->get()->toArray();
-        if (! empty($users)) {
-            $doctors = DB::table('doctors')->where("telegram_user", "=", $users[0]->id)->get()->toArray();
-            if (! empty($doctors)) {
-                $doctor = $doctors[0];
-                $answer = 'Добро пожаловать, '.$doctor->surname." ".$doctor->name." ".$doctor->patronymic;
 
-                $keyboard = $this->generateKeyboard($controller_config_path, $message);
+        $answer = 'Добро пожаловать в магазин компьютерной техники. Что Вас интересует?';
 
-                $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
-            }
-        }
+        $keyboard = $this->generateKeyboard($controller_config_path, $message);
+
+        $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
+
+        // if (! empty($users)) {
+        //     $answer = 'Добро пожаловать в магазин компьютерной техники. Что Вас интересует?';
+
+        //     $keyboard = $this->generateKeyboard($controller_config_path, $message);
+
+        //     $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
+
+        //     // $doctors = DB::table('doctors')->where("telegram_user", "=", $users[0]->id)->get()->toArray();
+        //     // if (! empty($doctors)) {
+        //     //     $doctor = $doctors[0];
+        //     //     $answer = 'Добро пожаловать, '.$doctor->surname." ".$doctor->name." ".$doctor->patronymic;
+
+        //     //     $keyboard = $this->generateKeyboard($controller_config_path, $message);
+
+        //     //     $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
+        //     // }
+        // }
 
         return;
     }

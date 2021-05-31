@@ -21,6 +21,10 @@ return [
         'App\\Http\Controllers\\GetPatientDataController',
         'App\\Http\Controllers\\GetSensorsDataController',
         'App\\Http\Controllers\\GetDoctorDataController',
+
+        'App\\Http\Controllers\\ProductsController',
+        'App\\Http\Controllers\\CategoriesController',
+        'App\\Http\Controllers\\HelpController',
     ],
     "goBack" => "Назад",
     "commands" => [
@@ -29,22 +33,22 @@ return [
             "controller" => 'App\\Http\Controllers\\StartupController',
             "is_stub" => false,
             "commands" => [
-                "getPatientData" => [
-                    "text" => "Данные о пациентах",
-                    "controller" => "App\\Http\Controllers\\GetPatientDataController",
+                "getCategories" => [
+                    "text" => "Категории",
+                    "controller" => "App\\Http\Controllers\\CategoriesController",
                     "is_stub" => false,
-                    "commands" => [
-                        "getSensorsData" => [
-                            "text" => "Данные датчиков",
-                            "controller" => "App\\Http\Controllers\\GetSensorsDataController",
+                    "commands" => [],
+                    "next_controller" => [
+                        "5" => [
+                            "controller" => 'App\\Http\Controllers\\ProductsController',
                             "is_stub" => true,
                             "commands" => []
                         ]
                     ]
                 ],
-                "getDoctorData" => [
-                    "text" => "Обо мне",
-                    "controller" => "App\\Http\Controllers\\GetDoctorDataController",
+                "getHelp" => [
+                    "text" => "Помощь",
+                    "controller" => "App\\Http\Controllers\\HelpController",
                     "is_stub" => true,
                     "commands" => []
                 ]
