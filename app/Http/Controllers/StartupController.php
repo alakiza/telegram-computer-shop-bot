@@ -27,24 +27,6 @@ class StartupController extends BaseBotController
 
         $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
 
-        // if (! empty($users)) {
-        //     $answer = 'Добро пожаловать в магазин компьютерной техники. Что Вас интересует?';
-
-        //     $keyboard = $this->generateKeyboard($controller_config_path, $message);
-
-        //     $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
-
-        //     // $doctors = DB::table('doctors')->where("telegram_user", "=", $users[0]->id)->get()->toArray();
-        //     // if (! empty($doctors)) {
-        //     //     $doctor = $doctors[0];
-        //     //     $answer = 'Добро пожаловать, '.$doctor->surname." ".$doctor->name." ".$doctor->patronymic;
-
-        //     //     $keyboard = $this->generateKeyboard($controller_config_path, $message);
-
-        //     //     $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
-        //     // }
-        // }
-
         return;
     }
 }

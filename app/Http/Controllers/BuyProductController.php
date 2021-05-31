@@ -44,28 +44,5 @@ class BuyProductController extends BaseBotController
 
         return false;
 
-        // $users = DB::table('telegram_users')->where("user_id", "=", $cid)->get()->toArray();
-        // if (!empty($users)) {            
-        //     $user_params = json_decode($users[0]->dialog_params, $associative=true);
-        //     $categories = DB::table('categories')->where("category_name", "=", $category)->get()->toArray();
-        //     if (!empty($categories)) {
-        //         $products = DB::table('products')->where("category_id", "=", $categories[0]->id)->get()->toArray();
-        //         foreach ($products as $product) {
-        //             array_push($buttons, [$product->name]);
-        //         }
-
-        //         $keyboard = $this->generateKeyboardFromButtons($controller_config_path, $buttons, $message);
-
-        //         $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
-
-        //         $user_params["selectedCategory"] = $category;
-
-        //         Log::info($category);
-        //         DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_params" => json_encode($user_params)]);
-
-        //         return true;
-        //     }
-        // }
-
     }
 }

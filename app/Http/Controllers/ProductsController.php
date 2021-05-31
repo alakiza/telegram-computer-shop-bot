@@ -80,9 +80,6 @@ class ProductsController extends BaseBotController
 
                 $buttons = [];
 
-                Log::info($product_page);
-                Log::info($max_items);
-                Log::info(count($products));
                 if(count($products) > $max_items) {
                     $from_item =  $product_page * $max_items;
 
@@ -128,28 +125,10 @@ class ProductsController extends BaseBotController
 
                 $user_params["selected_category"] = $category;
 
-                Log::info($category);
                 DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_params" => json_encode($user_params)]);
 
                 return true;
             }
-            //  else {
-               
-            //     if (!empty($categories)) {
-            //         $products = DB::table('products')->where("category_id", "=", $categories[0]->id)->get()->toArray();
-            //         foreach ($products as $product) {
-            //             array_push($buttons, [$product->name]);
-            //         }
-
-            //         $keyboard = $this->generateKeyboardFromButtons($controller_config_path, $buttons, $message);
-
-            //         $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
-
-            //         DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_params" => json_encode($user_params)]);
-
-            //         return true;
-            //     }
-            // }
         }
 
         return false;

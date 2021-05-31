@@ -41,13 +41,6 @@ class BaseBotController
     {
         $self_config = config($controller_config_path);
 
-        // $commands = $self_config['commands'];
-        // $buttons = [];
-
-        // foreach ($commands as $cmd => $cmd_config) {
-        //     array_push($buttons, [$cmd_config['text']]);
-        // }
-
         if($goBack) {
             if (count(explode(".commands.", $controller_config_path)) > 2) {
                 array_push($buttons, [config("telegram.goBack")]);
