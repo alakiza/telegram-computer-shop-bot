@@ -121,6 +121,21 @@ class BotController extends Controller
 
                 return;
             }
+            $pageUp = config("telegram.pageUp");
+            $pageDown = config("telegram.pageDown");
+
+            if (mb_stripos($mtext, $pageUp) !== false) {
+                if ($this->executeCommand($config_path, $message)) {
+                    return;
+                }
+            }
+
+            if (mb_stripos($mtext, $pageDown) !== false) {
+                if ($this->executeCommand($config_path, $message)) {
+                    return;
+                }
+            }
+
             $context_config = config($config_path);
             if (isset($context_config["next_controller"]) == true) {
                 foreach($context_config["next_controller"] as $next_controller_name => $next_controller_config) {

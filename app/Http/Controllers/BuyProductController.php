@@ -23,6 +23,7 @@ class BuyProductController extends BaseBotController
 
         $buttons = [];
 
+        Log::info($product);
         $users = DB::table('telegram_users')->where("user_id", "=", $cid)->get()->toArray();
         if (!empty($users)) {     
             $user_params = json_decode($users[0]->dialog_params, $associative=true);
@@ -30,7 +31,7 @@ class BuyProductController extends BaseBotController
             if (!empty($categories)) {
                 $products = DB::table('products')->where("category_id", "=", $categories[0]->id)->where("name", "=", $product)->get()->toArray();
                 if(!empty($products)) {
-                    $answer = 'Вы купили товар '.$product;
+                    $answer = 'Сейчас на складе '.$products[0]->count." шт.\nСтоимость ".$products[0]->price." руб";
 
                     $keyboard = $this->generateKeyboardFromButtons($controller_config_path, $buttons, $message);
 

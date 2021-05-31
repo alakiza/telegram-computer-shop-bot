@@ -10,6 +10,9 @@ return [
         'App\\Http\Controllers\\BuyProductController',
     ],
     "goBack" => "Назад",
+    "pageUp" => "⬆ Вернуться ⬆",
+    "pageDown" => "⬇ Вперёд ⬇",
+    "itemsOnPage" => 5,
     "commands" => [
         "start" => [
             "text" => "/start",
