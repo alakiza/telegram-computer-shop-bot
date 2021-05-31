@@ -2,20 +2,6 @@
 
 return [
     "token" => "1783279560:AAGQkha59E8VHbiG9Li9Ki5owgbfkdoI8Ls",
-    "default_time_range" => 300,
-    "influx_measurement" => "sensors",
-    "influx_fields" => [
-        "HR" => [
-            "name" => "ЧСС",
-            "critical_min" => 50,
-            "critical_max" => 80,
-        ],
-        "SPO2" => [
-            "name" => "Оксигенация",
-            "critical_min" => 85,
-            "critical_max" => null,
-        ],
-    ],
     "controllers" => [
         'App\\Http\Controllers\\StartupController',
         'App\\Http\Controllers\\ProductsController',

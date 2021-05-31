@@ -21,8 +21,6 @@ class BuyProductController extends BaseBotController
         $cid = $message->getChat()->getId();
         $product = $message->getText();
 
-        $answer = 'Вы купили товар '.$product;
-
         $buttons = [];
 
         $users = DB::table('telegram_users')->where("user_id", "=", $cid)->get()->toArray();
@@ -30,13 +28,20 @@ class BuyProductController extends BaseBotController
             $user_params = json_decode($users[0]->dialog_params, $associative=true);
             $categories = DB::table('categories')->where("category_name", "=", $user_params["selected_category"])->get()->toArray();
             if (!empty($categories)) {
-                $products = DB::table('products')->where("category_id", "=", $categories[0]->id)->get()->toArray();
+                $products = DB::table('products')->where("category_id", "=", $categories[0]->id)->where("name", "=", $product)->get()->toArray();
+                if(!empty($products)) {
+                    $answer = 'Вы купили товар '.$product;
+
+                    $keyboard = $this->generateKeyboardFromButtons($controller_config_path, $buttons, $message);
+
+                    $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
+
+                    return true;
+                }
             }
         }
 
-        $keyboard = $this->generateKeyboardFromButtons($controller_config_path, $buttons, $message);
-
-        $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
+        return false;
 
         // $users = DB::table('telegram_users')->where("user_id", "=", $cid)->get()->toArray();
         // if (!empty($users)) {            
@@ -61,6 +66,5 @@ class BuyProductController extends BaseBotController
         //     }
         // }
 
-        return true;
     }
 }

@@ -39,14 +39,14 @@ class ProductsController extends BaseBotController
 
                 $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
 
-                $user_params["selectedCategory"] = $category;
+                $user_params["selected_category"] = $category;
 
                 Log::info($category);
                 DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_params" => json_encode($user_params)]);
 
                 return true;
             } else {
-                $categories = DB::table('categories')->where("category_name", "=", $user_params["selectedCategory"])->get()->toArray();
+                $categories = DB::table('categories')->where("category_name", "=", $user_params["selected_category"])->get()->toArray();
                 if (!empty($categories)) {
                     $products = DB::table('products')->where("category_id", "=", $categories[0]->id)->get()->toArray();
                     foreach ($products as $product) {
