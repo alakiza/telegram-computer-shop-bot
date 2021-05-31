@@ -25,6 +25,7 @@ return [
         'App\\Http\Controllers\\ProductsController',
         'App\\Http\Controllers\\CategoriesController',
         'App\\Http\Controllers\\HelpController',
+        'App\\Http\Controllers\\BuyProductController',
     ],
     "goBack" => "Назад",
     "commands" => [
@@ -41,8 +42,15 @@ return [
                     "next_controller" => [
                         "5" => [
                             "controller" => 'App\\Http\Controllers\\ProductsController',
-                            "is_stub" => true,
-                            "commands" => []
+                            "is_stub" => false,
+                            "commands" => [],
+                            "next_controller" => [
+                                "5" => [
+                                    "controller" => 'App\\Http\Controllers\\BuyProductController',
+                                    "is_stub" => true,
+                                    "commands" => [],
+                                ]
+                            ]
                         ]
                     ]
                 ],

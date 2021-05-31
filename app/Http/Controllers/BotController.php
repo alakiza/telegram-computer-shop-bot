@@ -38,9 +38,7 @@ class BotController extends Controller
 
         $controllerClass = config($controller_config_path);
 
-        $this->controllers[$controllerClass]->processCmd($command_config_path, $message);
-
-        return;
+        return $this->controllers[$controllerClass]->processCmd($command_config_path, $message);
     }
 
     function generateConfigPathByDialogPath(Array $dialog_path)
@@ -115,6 +113,7 @@ class BotController extends Controller
 
                     // $config_path = $this->generateConfigPathByDialogPath($dialog_path);
                     $config_path = implode(".", $config_path_segments);
+                    Log::info($config_path);
                     $this->executeCommand($config_path, $message);
 
                     DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => $config_path]); 
@@ -126,10 +125,9 @@ class BotController extends Controller
             if (isset($context_config["next_controller"]) == true) {
                 foreach($context_config["next_controller"] as $next_controller_name => $next_controller_config) {
 
-                    Log::info($next_controller_name);
-                    Log::info($next_controller_config["controller"]);
-
-                    $this->executeCommand($config_path.".next_controller.".$next_controller_name, $message);
+                    if ($this->executeCommand($config_path.".next_controller.".$next_controller_name, $message)) {
+                        DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => $config_path.".next_controller.".$next_controller_name]);
+                    }
                 }
             }
 
